@@ -22,10 +22,17 @@ CLAUSE = (
 
 
 def passes_gate(text):
-    """Mirror the sealed gate: 1-200 chars, one line, not only whitespace."""
+    """Mirror the sealed gate: 1-200 chars, one line, not only whitespace.
+
+    The gate refuses text that is only whitespace; a line of bare punctuation
+    would pass that test while holding no clause at all, so require at least
+    one letter as well — a real sentence, not a blank with decoration.
+    """
     if not 1 <= len(text) <= 200:
         return False
     if not text.strip():
+        return False
+    if not any(ch.isalpha() for ch in text):
         return False
     if "\n" in text or "\r" in text:
         return False
